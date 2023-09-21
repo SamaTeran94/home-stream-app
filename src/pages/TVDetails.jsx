@@ -12,6 +12,7 @@ const TVDetails = () => {
 
     useEffect(() => {
         fetchTVDetails(params.id)
+        console.log(loading)
     }, [])
 
     if (!loading) {
@@ -21,8 +22,9 @@ const TVDetails = () => {
                     <img className="bg-image w-full h-auto lg:w-screen xl:h-screen" key={tvDetails.id} src={`https://image.tmdb.org/t/p/original${tvDetails.backdrop_path}`} alt="Album" />
                     <div className="flex justify-center mt-10">
                         <div className="h-full w-full md:w-10/12">
-                            <div className="flex justify-center md:justify-start">
-                                <Link to='/'><button className="btn btn-outline">Back to home</button></Link>
+                            <div className="flex justify-center md:justify-start gap-2">
+                                <Link to='/'><button className="btn btn-outline">Home</button></Link>
+                                <Link to='/tvshows'><button className="btn btn-outline">TV Shows</button></Link>
                             </div>
                             <div className="flex flex-col md:flex-row items-center">
                                 <div className="w-1/2 md:w-2/5 lg:w-1/3 xl:w-1/4 mt-5">

@@ -22,8 +22,8 @@ const MovieDetails = () => {
                     <div className="flex justify-center mt-10">
                         <div className="h-full w-10/12">
                             <div className="gap-2 flex">
-                                <Link to='/'><button className="btn btn-outline">Back To Home</button></Link>
-                                <Link to='/movies'><button className="btn btn-outline">Back To Top Rated Movies</button></Link>
+                                <Link to='/'><button className="btn btn-outline">Home</button></Link>
+                                <Link to='/movies'><button className="btn btn-outline">Movies</button></Link>
                             </div>
                             <div className="flex flex-col md:flex-row items-center">
                                 <div className="w-1/2 md:w-2/5 lg:w-1/3 xl:w-1/4 mt-5">

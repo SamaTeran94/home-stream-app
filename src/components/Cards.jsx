@@ -1,18 +1,17 @@
 import { useEffect, useContext } from "react"
-import Spinner from "./layout/Spinner";
-import MoviesShowsContext from "../context/movies_shows/MoviesShowsContext";
+import HomeContext from "../context/movies_shows/HomeContext";
 import CardItemMovies from "./CardItemMovies"
 import CardItemTV from "./CardItemTV";
+import MoviesShowsContext from "../context/movies_shows/MoviesShowsContext";
 
 const Cards = () => {
 
-    const { popularMovies, popularTVShows, loading, fetchPopularMovies, fetchPopularTVShows } = useContext(MoviesShowsContext)
+    const { popularMovies, popularTVShows, fetchPopularMovies, fetchPopularTVShows, loading } = useContext(MoviesShowsContext)
 
     useEffect(() => {
         fetchPopularMovies()
         fetchPopularTVShows()
     }, [])
-
 
     if (!loading) {
         return (
@@ -39,8 +38,6 @@ const Cards = () => {
                 </div >
             </>
         )
-    } else {
-        return <Spinner />
     }
 }
 

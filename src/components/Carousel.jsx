@@ -4,7 +4,7 @@ import MoviesShowsContext from "../context/movies_shows/MoviesShowsContext";
 
 const Carousel = () => {
 
-    const { nowPlayingMovies, fetchNowPlayingMovies, } = useContext(MoviesShowsContext)
+    const { nowPlayingMovies, fetchNowPlayingMovies } = useContext(MoviesShowsContext)
 
     useEffect(() => {
         fetchNowPlayingMovies()

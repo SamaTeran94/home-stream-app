@@ -10,6 +10,7 @@ export const MoviesShowsProvider = ({ children }) => {
 
     const [popularMovies, setPopularMovies] = useState([])
     const [topRatedMovies, setTopRatedMovies] = useState([])
+    const [topRatedTVShows, setTopRatedTVShows] = useState([])
     const [popularTVShows, setPopularTVShows] = useState([])
     const [loading, setLoading] = useState(true)
     const [movieDetails, setMovieDetails] = useState({})
@@ -32,13 +33,13 @@ export const MoviesShowsProvider = ({ children }) => {
 
         if (response.ok) {
             const { results } = await response.json();
-
+            setLoading(false)
             setNowPlayingMovies(results);
-            setLoading(false);
+
         } else {
 
             console.error('Failed to fetch popular movies.');
-            setLoading(false);
+
         }
     }
 
@@ -60,11 +61,12 @@ export const MoviesShowsProvider = ({ children }) => {
             const { results } = await response.json();
             const latestPopularMovies = results.slice(0, resultsPerPage);
             setPopularMovies(latestPopularMovies);
-            setLoading(false);
+            setLoading(false)
+
         } else {
             // Handle error
             console.error('Failed to fetch popular movies.');
-            setLoading(false);
+
         }
     }
 
@@ -84,12 +86,13 @@ export const MoviesShowsProvider = ({ children }) => {
 
         if (response.ok) {
             const { results } = await response.json();
+            setLoading(false)
             setTopRatedMovies(results);
-            setLoading(false);
+
         } else {
             // Handle error
             console.error('Failed to fetch popular movies.');
-            setLoading(false);
+
         }
     }
 
@@ -111,12 +114,39 @@ export const MoviesShowsProvider = ({ children }) => {
         if (response.ok) {
             const { results } = await response.json();
             const latestPopularTVShows = results.slice(0, resultsPerPage);
+            setLoading(false)
             setPopularTVShows(latestPopularTVShows);
-            setLoading(false);
+
         } else {
             // Handle error
             console.error('Failed to fetch popular movies.');
-            setLoading(false);
+
+        }
+    }
+
+    //Top Rated TV Shows
+
+    const fetchTopRatedTVShows = async () => {
+
+        // const resultsPerPage = 20;
+
+        // Construct query parameters
+        const params = new URLSearchParams({
+            api_key: MOVIES_TOKEN,
+            language: 'en-US',
+        });
+
+        const response = await fetch(`${MOVIES_URL}/tv/top_rated?${params}`);
+
+        if (response.ok) {
+            const { results } = await response.json();
+            setLoading(false)
+            setTopRatedTVShows(results);
+
+        } else {
+            // Handle error
+            console.error('Failed to fetch popular movies.');
+
         }
     }
 
@@ -133,11 +163,12 @@ export const MoviesShowsProvider = ({ children }) => {
         if (response.ok) {
 
             const data = await response.json();
+            setLoading(false)
             setMovieDetails(data);
-            setLoading(false);
+
         } else {
             window.location = '/notfound';
-            setLoading(false);
+
         }
     }
 
@@ -154,11 +185,12 @@ export const MoviesShowsProvider = ({ children }) => {
         if (response.ok) {
 
             const data = await response.json();
+            setLoading(false)
             setTVDetails(data);
-            setLoading(false);
+
         } else {
             window.location = '/notfound';
-            setLoading(false);
+
         }
     }
 
@@ -170,12 +202,15 @@ export const MoviesShowsProvider = ({ children }) => {
         nowPlayingMovies,
         tvDetails,
         topRatedMovies,
+        topRatedTVShows,
+        setLoading,
         fetchPopularMovies,
         fetchPopularTVShows,
         fetchMovieDetails,
         fetchNowPlayingMovies,
         fetchTVDetails,
-        fetchTopRatedMovies
+        fetchTopRatedMovies,
+        fetchTopRatedTVShows
     }}>
         {children}
     </MoviesShowsContext.Provider>
