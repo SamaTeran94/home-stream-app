@@ -1,5 +1,4 @@
 import { useEffect, useContext } from "react"
-import HomeContext from "../context/movies_shows/HomeContext";
 import CardItemMovies from "./CardItemMovies"
 import CardItemTV from "./CardItemTV";
 import MoviesShowsContext from "../context/movies_shows/MoviesShowsContext";

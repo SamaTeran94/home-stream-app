@@ -3,7 +3,6 @@ import { useContext } from "react";
 import Cards from "../components/Cards"
 import Carousel from "../components/Carousel"
 import Search from "../components/Search"
-import HomeContext from "../context/movies_shows/HomeContext";
 import Spinner from "../components/layout/Spinner";
 import MoviesShowsContext from "../context/movies_shows/MoviesShowsContext";
 
@@ -24,11 +23,13 @@ const Home = () => {
 
     if (!loading) {
         return (
-            <div className="flex flex-col h-full gap-20 pb-10">
-                <Carousel />
-                <Search />
-                <Cards />
-            </div>
+            <>
+                <div className="h-full pb-10">
+                    <Carousel />
+                    <Search />
+                    <Cards />
+                </div>
+            </>
         )
     } else {
         return <Spinner />
