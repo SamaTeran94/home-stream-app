@@ -10,29 +10,34 @@ import SearchPage from "./pages/SearchPage"
 import { MoviesShowsProvider } from "./context/movies_shows/MoviesShowsContext"
 import MovieDetails from "./pages/MovieDetails"
 import TVDetails from "./pages/TVDetails"
+import { SearchProvider } from "./context/movies_shows/SearchContext"
+
 
 function App() {
 
   return (
     <>
+
       <MoviesShowsProvider>
         <Router>
-          <div className="flex flex-col h-screen justify-between">
-            <Navbar />
-            <main>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/movies" element={<Movies />} />
-                <Route path="/tvshows" element={<TVShows />} />
-                <Route path="/search" element={<SearchPage />} />
-                <Route path="/tv_details/:id" element={<TVDetails />} />
-                <Route path="/movie_details/:id" element={<MovieDetails />} />
-                <Route path="/notfound" element={<NotFound />} />
-                <Route path="/*" element={<NotFound />} />
-              </Routes>
-            </main>
-            <Footer />
-          </div>
+          <SearchProvider>
+            <div className="flex flex-col h-screen justify-between">
+              <Navbar />
+              <main>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/movies" element={<Movies />} />
+                  <Route path="/tvshows" element={<TVShows />} />
+                  <Route path="/search" element={<SearchPage />} />
+                  <Route path="/tv_details/:id" element={<TVDetails />} />
+                  <Route path="/movie_details/:id" element={<MovieDetails />} />
+                  <Route path="/notfound" element={<NotFound />} />
+                  <Route path="/*" element={<NotFound />} />
+                </Routes>
+              </main>
+              <Footer />
+            </div>
+          </SearchProvider>
         </Router>
       </MoviesShowsProvider>
     </>

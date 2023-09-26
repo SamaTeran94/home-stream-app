@@ -5,13 +5,10 @@ const SearchCardsItem = ({ searchResults }) => {
 
     const location = useLocation();
     const searchType = new URLSearchParams(location.search).get('type');
-    console.log(searchType)
-
-    const filteredResults = searchResults.filter(item => item.poster_path !== null);
 
     if (searchType === 'movie') {
         return (
-            filteredResults.map(({ id, poster_path, release_date, original_title }) => (
+            searchResults.results.map(({ id, poster_path, release_date, original_title }) => (
                 <div key={id} className="relative bg-yellow-300 text-white font-bold rounded-lg shadow-md p-2 cursor-pointer hover:translate-y-2">
                     <Link to={`/movie_details/${id}`}>
                         <div className="group">
@@ -33,7 +30,7 @@ const SearchCardsItem = ({ searchResults }) => {
         )
     } else {
         return (
-            filteredResults.map(({ id, poster_path, first_air_date, name }) => (
+            searchResults.results.map(({ id, poster_path, first_air_date, name }) => (
                 <div key={id} className="relative bg-yellow-300 text-white font-bold rounded-lg shadow-md p-2 cursor-pointer hover:translate-y-2">
                     <Link to={`/tv_details/${id}`}>
                         <div className="group">

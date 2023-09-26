@@ -1,24 +1,27 @@
 import SearchCards from '../components/SearchCards.jsx'
 import SearchComponent from '../components/Search.jsx'
-import { useLocation } from 'react-router-dom';
+import { useContext, useEffect } from 'react';
 import Spinner from '../components/layout/Spinner.jsx'
-
+import SearchContext from '../context/movies_shows/SearchContext';
 
 const SearchPage = () => {
 
-    const location = useLocation();
-    const searchResults = location.state?.searchResults || [];
-    const loading = location.state?.loading || true
+    const { searchResults, loading, setLoading, handleSearch, setSearchResults, page, setPage } = useContext(SearchContext)
+
+    useEffect(() => {
+        handleSearch();
+        setLoading(false)
+    }, [])
 
     if (!loading) {
-        return <Spinner />
-    } else {
         return (
             <div className="h-full pb-10 pt-20">
                 <SearchComponent />
-                <SearchCards searchResults={searchResults} />
+                <SearchCards searchResults={searchResults} setSearchResults={setSearchResults} page={page} setPage={setPage} setLoading={setLoading} />
             </div>
         )
+    } else {
+        return <Spinner />
     }
 }
 
