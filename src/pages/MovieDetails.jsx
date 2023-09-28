@@ -6,12 +6,20 @@ import { AiFillStar } from 'react-icons/ai'
 
 const MovieDetails = () => {
 
-    const { movieDetails, fetchMovieDetails, loading } = useContext(MoviesShowsContext)
+    const { movieDetails, fetchMovieDetails, loading, movieDetailsProviders, fetchMovieDetailsProviders } = useContext(MoviesShowsContext)
 
     const params = useParams()
 
+    let region = "";
+    if (movieDetails.production_countries && movieDetails.production_countries.length > 0) {
+        region = movieDetails.production_countries[0].iso_3166_1;
+    }
+
+    const regionData = movieDetailsProviders.results?.[region]?.buy || [];
+
     useEffect(() => {
         fetchMovieDetails(params.id)
+        fetchMovieDetailsProviders(params.id)
     }, [])
 
     if (!loading) {
@@ -35,7 +43,7 @@ const MovieDetails = () => {
                                 </div>
                                 <div className="w-3/4 md:w-3/5 lg:w-2/3 xl:w-3/4 mt-5 flex flex-col gap-5 md:ml-10 align-mid">
                                     <div className="flex flex-col justify-center items-center text-center">
-                                        <h1 className="font-bold text-3xl text-white">{movieDetails.title?.toUpperCase()}</h1>
+                                        <h1 className="font-bold text-3xl text-white">{movieDetails.title?.toUpperCase()} ({movieDetails.release_date?.split('-')[0]})</h1>
                                         <h1>{movieDetails.tagline}</h1>
                                     </div>
                                     <div className="flex items-center">
@@ -48,11 +56,43 @@ const MovieDetails = () => {
                                     <div>
                                         <h1 className="text-justify"> {movieDetails.overview}</h1>
                                     </div>
-                                    <div className="">
-                                        <h1 className="font-bold text-white">Genres</h1>
-                                        {movieDetails.genres?.map((genre) => (
-                                            <h1 key={genre.id}>{genre.name}</h1>
-                                        ))}
+                                    <div className="flex justify-between">
+                                        <div>
+                                            <h1 className="font-bold text-white pb-2">Genres</h1>
+                                            {movieDetails.genres?.map((genre) => (
+                                                <h1 key={genre.id}>{genre.name}</h1>
+                                            ))}
+                                        </div>
+                                        <div>
+                                            <h1 className="font-bold text-white pb-2">Where To Watch</h1>
+                                            <div className="flex flex-col gap-5">
+                                                <div className="flex gap-3">
+                                                    <h1 className="">Buy</h1>
+                                                    {regionData?.map((provider) => (
+                                                        <img
+                                                            src={`https://image.tmdb.org/t/p/w200${provider.logo_path}`}
+                                                            key={provider.id}
+                                                            alt={`${provider.provider_id} logo`}
+                                                            style={{ width: '40px', height: 'auto', borderRadius: '5px', }}
+                                                        />
+                                                    ))}
+                                                </div>
+                                                <div className="flex gap-3">
+                                                    <h1>Rent</h1>
+                                                    {regionData?.map((provider) => (
+                                                        <img
+                                                            src={`https://image.tmdb.org/t/p/w200${provider.logo_path}`}
+                                                            key={provider.id}
+                                                            alt={`${provider.provider_id} logo`}
+                                                            style={{ width: '40px', height: 'auto', borderRadius: '5px' }}
+                                                        />
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <h1>Trailer</h1>
+                                        </div>
                                     </div>
                                     <div>
                                         <a href={movieDetails.homepage} target="_blank" rel="noreferrer"><button className="btn btn-outline">Visit Movie Homepage</button></a>
@@ -63,29 +103,46 @@ const MovieDetails = () => {
                     </div>
                     <div className="flex justify-center mt-10 mb-10">
                         <div className="h-full w-10/12">
-                            <div className="flex justify-center">
-                                <h1 className="font-bold text-xl text-white">MOVIE INFO</h1>
-                            </div>
-                            <div className="flex flex-col gap-3">
-                                <h1><span className="font-bold text-white">Budget: </span>{`$${movieDetails.budget?.toLocaleString()}`}</h1>
-                                <hr></hr>
-                                <h1><span className="font-bold text-white">Revenue: </span>{`$${movieDetails.revenue?.toLocaleString()}`}</h1>
-                                <hr></hr>
-                                <h1><span className="font-bold text-white">Runtime:</span> {`${movieDetails.runtime} min`}</h1>
-                                <hr></hr>
-                                <h1><span className="font-bold text-white">Status: </span>{movieDetails.status}</h1>
-                                <hr></hr>
-                                <div className="flex flex-col">
-                                    <h1 className="font-bold text-white">Production Companies</h1>
-                                    <div className="flex">
-                                        {movieDetails.production_companies?.map((company, index) => (
-                                            <div key={company.id} className="flex flex-row">
-                                                <h1>{company.name}{index < movieDetails.production_companies.length - 1 ? ',\u00A0' : ''}</h1>
+                            <div tabIndex={0} className="collapse collapse-plus border border-base-300 bg-base-200">
+                                <input type="checkbox" />
+                                <div className="collapse-title text-xl font-medium">
+                                    Movie Info
+                                </div>
+                                <div className="collapse-content">
+                                    <div className="flex flex-col gap-3">
+                                        <h1><span className="font-bold text-white">Budget: </span>{`$${movieDetails.budget?.toLocaleString()}`}</h1>
+                                        <hr></hr>
+                                        <h1><span className="font-bold text-white">Revenue: </span>{`$${movieDetails.revenue?.toLocaleString()}`}</h1>
+                                        <hr></hr>
+                                        <h1><span className="font-bold text-white">Runtime:</span> {`${movieDetails.runtime} min`}</h1>
+                                        <hr></hr>
+                                        <h1><span className="font-bold text-white">Status: </span>{movieDetails.status}</h1>
+                                        <hr></hr>
+                                        <div className="flex flex-col">
+                                            <h1 className="font-bold text-white">Production Companies</h1>
+                                            <div className="flex">
+                                                {movieDetails.production_companies?.map((company, index) => (
+                                                    <div key={company.id} className="flex flex-row">
+                                                        <h1>{company.name}{index < movieDetails.production_companies.length - 1 ? ',\u00A0' : ''}</h1>
+                                                    </div>
+                                                ))}
                                             </div>
-                                        ))}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            <div tabIndex={0} className="collapse collapse-plus border border-base-300 bg-base-200">
+                                <input type="checkbox" />
+                                <div className="collapse-title text-xl font-medium">
+                                    Where To Watch
+                                </div>
+                                <div className="collapse-content">
+                                    <div className="flex flex-col gap-3">
+
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>

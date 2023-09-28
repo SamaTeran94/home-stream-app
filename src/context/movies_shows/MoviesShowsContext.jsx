@@ -14,6 +14,7 @@ export const MoviesShowsProvider = ({ children }) => {
     const [popularTVShows, setPopularTVShows] = useState([])
     const [loading, setLoading] = useState(true)
     const [movieDetails, setMovieDetails] = useState({})
+    const [movieDetailsProviders, setMovieDetailsProviders] = useState({})
     const [tvDetails, setTVDetails] = useState({})
     const [nowPlayingMovies, setNowPlayingMovies] = useState([])
 
@@ -163,8 +164,32 @@ export const MoviesShowsProvider = ({ children }) => {
         if (response.ok) {
 
             const data = await response.json();
+            console.log(data)
             setLoading(false)
             setMovieDetails(data);
+
+        } else {
+            window.location = '/notfound';
+
+        }
+    }
+
+    //Movie Details - Providers
+
+    const fetchMovieDetailsProviders = async (id) => {
+        const params = new URLSearchParams({
+            api_key: MOVIES_TOKEN,
+            language: 'en-US',
+        });
+
+        const response = await fetch(`${MOVIES_URL}/movie/${id}/watch/providers?${params}`);
+
+        if (response.ok) {
+
+            const data = await response.json();
+            console.log(data)
+            setLoading(false)
+            setMovieDetailsProviders(data);
 
         } else {
             window.location = '/notfound';
@@ -203,6 +228,7 @@ export const MoviesShowsProvider = ({ children }) => {
         tvDetails,
         topRatedMovies,
         topRatedTVShows,
+        movieDetailsProviders,
         setLoading,
         fetchPopularMovies,
         fetchPopularTVShows,
@@ -210,7 +236,8 @@ export const MoviesShowsProvider = ({ children }) => {
         fetchNowPlayingMovies,
         fetchTVDetails,
         fetchTopRatedMovies,
-        fetchTopRatedTVShows
+        fetchTopRatedTVShows,
+        fetchMovieDetailsProviders
     }}>
         {children}
     </MoviesShowsContext.Provider>

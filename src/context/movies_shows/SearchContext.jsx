@@ -16,12 +16,12 @@ export const SearchProvider = ({ children }) => {
     const [loading, setLoading] = useState(true)
     let [page, setPage] = useState(1)
 
+
     //Handle First Search
 
     const handleSearch = async (e) => {
 
         setPage(1)
-        setSearchResults
 
         console.log(e)
         if (e) {
@@ -67,6 +67,11 @@ export const SearchProvider = ({ children }) => {
             console.error('Error searching for movies:', error);
         }
     };
+
+
+    //Sort Results by year
+
+
 
     return <SearchContext.Provider value={{
         searchResults,

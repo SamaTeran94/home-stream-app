@@ -10,7 +10,6 @@ const SearchCards = ({ searchResults, setSearchResults, page, setPage, setLoadin
     const navigate = useNavigate();
     const searchTerm = new URLSearchParams(location.search).get('search-term');
     const searchType = new URLSearchParams(location.search).get('type')
-    console.log(page)
 
     const MOVIES_URL = import.meta.env.VITE_MOVIES_URL;
     const MOVIES_TOKEN = import.meta.env.VITE_MOVIES_TOKEN;
@@ -109,7 +108,16 @@ const SearchCards = ({ searchResults, setSearchResults, page, setPage, setLoadin
                     <div className="flex justify-center mb-5">
                         <h1 className="font-bold text-white text-2xl">{`${searchResults.results.length} of ${searchResults.total_results} results for ${searchTerm}`}</h1>
                     </div>
+                    <div className="flex flex-row justify-end mb-5">
+                        <input
+                            type="radio"
+                            name="type"
+                            value="movie"
+                            className="radio"
 
+                        />
+                        Year
+                    </div>
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-7 px-4 gap-5">
 
                         <SearchCardsItem searchResults={searchResults} />
