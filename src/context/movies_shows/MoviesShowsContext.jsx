@@ -5,6 +5,8 @@ const MoviesShowsContext = createContext()
 
 const MOVIES_URL = import.meta.env.VITE_MOVIES_URL;
 const MOVIES_TOKEN = import.meta.env.VITE_MOVIES_TOKEN;
+const IPINFO_TOKEN = import.meta.env.VITE_IPINFO_TOKEN;
+const IPINFO_URL = import.meta.env.VITE_IPINFO_URL;
 
 export const MoviesShowsProvider = ({ children }) => {
 
@@ -17,6 +19,7 @@ export const MoviesShowsProvider = ({ children }) => {
     const [movieDetailsProviders, setMovieDetailsProviders] = useState({})
     const [tvDetails, setTVDetails] = useState({})
     const [nowPlayingMovies, setNowPlayingMovies] = useState([])
+    const [country, setCountry] = useState({})
 
     // Now Playing Movies
 
@@ -219,6 +222,23 @@ export const MoviesShowsProvider = ({ children }) => {
         }
     }
 
+    //IP INFO Request
+
+    const fetchCountry = async () => {
+        const api_key = IPINFO_TOKEN;
+
+        const response = await fetch(`${IPINFO_URL}?token=${api_key}`);
+
+        if (response.ok) {
+
+            const data = await response.json();
+            console.log(data)
+            setCountry(data)
+            setLoading(false)
+        }
+    }
+
+
     return <MoviesShowsContext.Provider value={{
         popularMovies,
         popularTVShows,
@@ -229,6 +249,7 @@ export const MoviesShowsProvider = ({ children }) => {
         topRatedMovies,
         topRatedTVShows,
         movieDetailsProviders,
+        country,
         setLoading,
         fetchPopularMovies,
         fetchPopularTVShows,
@@ -237,7 +258,8 @@ export const MoviesShowsProvider = ({ children }) => {
         fetchTVDetails,
         fetchTopRatedMovies,
         fetchTopRatedTVShows,
-        fetchMovieDetailsProviders
+        fetchMovieDetailsProviders,
+        fetchCountry
     }}>
         {children}
     </MoviesShowsContext.Provider>

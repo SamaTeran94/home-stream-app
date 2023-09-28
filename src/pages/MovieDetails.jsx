@@ -3,23 +3,27 @@ import { useParams, Link } from "react-router-dom";
 import MoviesShowsContext from "../context/movies_shows/MoviesShowsContext";
 import Spinner from "../components/layout/Spinner";
 import { AiFillStar } from 'react-icons/ai'
+import ErrorAlert from "../components/ErrorAlert";
 
 const MovieDetails = () => {
 
-    const { movieDetails, fetchMovieDetails, loading, movieDetailsProviders, fetchMovieDetailsProviders } = useContext(MoviesShowsContext)
+    const { movieDetails, fetchMovieDetails, loading, movieDetailsProviders, fetchMovieDetailsProviders, fetchCountry, country } = useContext(MoviesShowsContext)
 
     const params = useParams()
 
     let region = "";
-    if (movieDetails.production_countries && movieDetails.production_countries.length > 0) {
-        region = movieDetails.production_countries[0].iso_3166_1;
+    if (country.country) {
+        region = country.country
     }
 
-    const regionData = movieDetailsProviders.results?.[region]?.buy || [];
+    const regionDataBuy = movieDetailsProviders.results?.[region]?.buy
+    const regionDataRent = movieDetailsProviders.results?.[region]?.rent
+    const regionDataFlatrate = movieDetailsProviders.results?.[region]?.flatrate
 
     useEffect(() => {
         fetchMovieDetails(params.id)
         fetchMovieDetailsProviders(params.id)
+        fetchCountry()
     }, [])
 
     if (!loading) {
@@ -65,30 +69,56 @@ const MovieDetails = () => {
                                         </div>
                                         <div>
                                             <h1 className="font-bold text-white pb-2">Where To Watch</h1>
-                                            <div className="flex flex-col gap-5">
-                                                <div className="flex gap-3">
-                                                    <h1 className="">Buy</h1>
-                                                    {regionData?.map((provider) => (
-                                                        <img
-                                                            src={`https://image.tmdb.org/t/p/w200${provider.logo_path}`}
-                                                            key={provider.id}
-                                                            alt={`${provider.provider_id} logo`}
-                                                            style={{ width: '40px', height: 'auto', borderRadius: '5px', }}
-                                                        />
-                                                    ))}
+                                            {!regionDataBuy && !regionDataRent && !regionDataFlatrate ?
+                                                <h1>No Data Available</h1> :
+                                                <div className={!regionDataBuy && !regionDataRent ? `flex flex-col gap-0` : `flex flex-col gap-5`}>
+                                                    <div className="flex gap-2">
+                                                        {!regionDataBuy ? null : (
+                                                            <div className="flex gap-2">
+                                                                <h1 className="">Buy</h1>
+                                                                {regionDataBuy.map((provider) => (
+                                                                    <img
+                                                                        src={`https://image.tmdb.org/t/p/w200${provider.logo_path}`}
+                                                                        key={provider.id}
+                                                                        alt={`${provider.provider_id} logo`}
+                                                                        style={{ width: '40px', height: 'auto', borderRadius: '5px' }}
+                                                                    />
+                                                                ))}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                    <div className="flex gap-2">
+                                                        {!regionDataRent ? null : (
+                                                            <div className="flex gap-2">
+                                                                <h1 className="">Rent</h1>
+                                                                {regionDataRent.map((provider) => (
+                                                                    <img
+                                                                        src={`https://image.tmdb.org/t/p/w200${provider.logo_path}`}
+                                                                        key={provider.id}
+                                                                        alt={`${provider.provider_id} logo`}
+                                                                        style={{ width: '40px', height: 'auto', borderRadius: '5px' }}
+                                                                    />
+                                                                ))}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                    <div className="flex gap-2">
+                                                        {!regionDataFlatrate ? null : (
+                                                            <div className="flex gap-2">
+                                                                <h1 className="">Stream</h1>
+                                                                {regionDataFlatrate.map((provider) => (
+                                                                    <img
+                                                                        src={`https://image.tmdb.org/t/p/w200${provider.logo_path}`}
+                                                                        key={provider.id}
+                                                                        alt={`${provider.provider_id} logo`}
+                                                                        style={{ width: '40px', height: 'auto', borderRadius: '5px' }}
+                                                                    />
+                                                                ))}
+                                                            </div>
+                                                        )}
+                                                    </div>
                                                 </div>
-                                                <div className="flex gap-3">
-                                                    <h1>Rent</h1>
-                                                    {regionData?.map((provider) => (
-                                                        <img
-                                                            src={`https://image.tmdb.org/t/p/w200${provider.logo_path}`}
-                                                            key={provider.id}
-                                                            alt={`${provider.provider_id} logo`}
-                                                            style={{ width: '40px', height: 'auto', borderRadius: '5px' }}
-                                                        />
-                                                    ))}
-                                                </div>
-                                            </div>
+                                            }
                                         </div>
                                         <div>
                                             <h1>Trailer</h1>
@@ -110,7 +140,14 @@ const MovieDetails = () => {
                                 </div>
                                 <div className="collapse-content">
                                     <div className="flex flex-col gap-3">
-                                        <h1><span className="font-bold text-white">Budget: </span>{`$${movieDetails.budget?.toLocaleString()}`}</h1>
+                                        <div>
+                                            <span className="font-bold text-white">
+                                                Budget:</span> {!movieDetails.budget ? (
+                                                    <span>No data available</span>
+                                                ) : (
+                                                    `$${movieDetails.budget?.toLocaleString()}`
+                                                )}
+                                        </div>
                                         <hr></hr>
                                         <h1><span className="font-bold text-white">Revenue: </span>{`$${movieDetails.revenue?.toLocaleString()}`}</h1>
                                         <hr></hr>
@@ -134,7 +171,7 @@ const MovieDetails = () => {
                             <div tabIndex={0} className="collapse collapse-plus border border-base-300 bg-base-200">
                                 <input type="checkbox" />
                                 <div className="collapse-title text-xl font-medium">
-                                    Where To Watch
+                                    Cast
                                 </div>
                                 <div className="collapse-content">
                                     <div className="flex flex-col gap-3">
