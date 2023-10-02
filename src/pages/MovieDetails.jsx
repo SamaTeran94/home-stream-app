@@ -3,13 +3,29 @@ import { useParams, Link } from "react-router-dom";
 import MoviesShowsContext from "../context/movies_shows/MoviesShowsContext";
 import Spinner from "../components/layout/Spinner";
 import { AiFillStar } from 'react-icons/ai'
-import ErrorAlert from "../components/ErrorAlert";
 
 const MovieDetails = () => {
 
-    const { movieDetails, fetchMovieDetails, loading, movieDetailsProviders, fetchMovieDetailsProviders, fetchCountry, country } = useContext(MoviesShowsContext)
+    const { movieDetails, fetchMovieDetails, loading, movieDetailsProviders, fetchMovieDetailsProviders, fetchCountry, country, fetchTrailers, youtubeTrailer } = useContext(MoviesShowsContext)
 
     const params = useParams()
+
+    let YTTrailerKey = ""; // Initialize the key as an empty string
+
+    if (youtubeTrailer?.results) {
+        // Check if youtubeTrailer.results is defined
+        for (const video of youtubeTrailer.results) {
+            if (video.name === 'Official Trailer' || video.name === 'Main Trailer' || video.name.includes('Trailer')) {
+                YTTrailerKey = video.key; // Set the key to the video's key
+                break; // Exit the loop since we found the video
+            } else {
+                YTTrailerKey = null
+            }
+        }
+    }
+
+    let videoUrl = `https://www.youtube.com/embed/${YTTrailerKey}`;
+    console.log(videoUrl)
 
     let region = "";
     if (country.country) {
@@ -24,6 +40,7 @@ const MovieDetails = () => {
         fetchMovieDetails(params.id)
         fetchMovieDetailsProviders(params.id)
         fetchCountry()
+        fetchTrailers(params.id)
     }, [])
 
     if (!loading) {
@@ -60,12 +77,47 @@ const MovieDetails = () => {
                                     <div>
                                         <h1 className="text-justify"> {movieDetails.overview}</h1>
                                     </div>
-                                    <div className="flex justify-between">
-                                        <div>
-                                            <h1 className="font-bold text-white pb-2">Genres</h1>
-                                            {movieDetails.genres?.map((genre) => (
-                                                <h1 key={genre.id}>{genre.name}</h1>
-                                            ))}
+
+                                    <div className="flex flex-col gap-5 md:flex-row justify-between">
+                                        <div className="flex flex-col gap-5">
+                                            <div>
+                                                <h1 className="font-bold text-white pb-2">Genres</h1>
+                                                {movieDetails.genres?.map((genre) => (
+                                                    <h1 key={genre.id}>{genre.name}</h1>
+                                                ))}
+                                            </div>
+                                            <div>
+                                                <div >
+                                                    <button className="btn btn-outline" onClick={() => document.getElementById('my_modal_2').showModal()}>Trailer</button>
+                                                    <dialog id="my_modal_2" className="modal">
+                                                        <div className="modal-box">
+                                                            <div className="iframe-container">
+                                                                {YTTrailerKey !== null ?
+                                                                    <iframe
+                                                                        width="100%"    /* Set the iframe width to 100% */
+                                                                        height="0"      /* Set the initial height to 0 */
+                                                                        src={videoUrl}
+                                                                        frameBorder="0"
+                                                                        allowFullScreen
+                                                                        allow="autoplay; encrypted-media"
+                                                                        onLoad={(e) => {
+                                                                            // Calculate and set the iframe's height based on its width and aspect ratio
+                                                                            const iframe = e.target;
+                                                                            const aspectRatio = 9 / 16; // 16:9 aspect ratio
+                                                                            const width = iframe.clientWidth;
+                                                                            iframe.style.height = `${width * aspectRatio}px`;
+                                                                        }}
+                                                                    ></iframe>
+                                                                    : <h1>No data available</h1>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                        <form method="dialog" className="modal-backdrop">
+                                                            <button onClick={() => document.getElementById('my_modal_2').close()}>Close</button>
+                                                        </form>
+                                                    </dialog>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div>
                                             <h1 className="font-bold text-white pb-2">Where To Watch</h1>
@@ -74,7 +126,7 @@ const MovieDetails = () => {
                                                 <div className={!regionDataBuy && !regionDataRent ? `flex flex-col gap-0` : `flex flex-col gap-5`}>
                                                     <div className="flex gap-2">
                                                         {!regionDataBuy ? null : (
-                                                            <div className="flex gap-2">
+                                                            <div className="flex gap-4">
                                                                 <h1 className="">Buy</h1>
                                                                 {regionDataBuy.map((provider) => (
                                                                     <img
@@ -89,7 +141,7 @@ const MovieDetails = () => {
                                                     </div>
                                                     <div className="flex gap-2">
                                                         {!regionDataRent ? null : (
-                                                            <div className="flex gap-2">
+                                                            <div className="flex gap-4">
                                                                 <h1 className="">Rent</h1>
                                                                 {regionDataRent.map((provider) => (
                                                                     <img
@@ -104,7 +156,7 @@ const MovieDetails = () => {
                                                     </div>
                                                     <div className="flex gap-2">
                                                         {!regionDataFlatrate ? null : (
-                                                            <div className="flex gap-2">
+                                                            <div className="flex gap-4">
                                                                 <h1 className="">Stream</h1>
                                                                 {regionDataFlatrate.map((provider) => (
                                                                     <img
@@ -120,12 +172,6 @@ const MovieDetails = () => {
                                                 </div>
                                             }
                                         </div>
-                                        <div>
-                                            <h1>Trailer</h1>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <a href={movieDetails.homepage} target="_blank" rel="noreferrer"><button className="btn btn-outline">Visit Movie Homepage</button></a>
                                     </div>
                                 </div>
                             </div>
@@ -175,7 +221,7 @@ const MovieDetails = () => {
                                 </div>
                                 <div className="collapse-content">
                                     <div className="flex flex-col gap-3">
-
+                                        (//Cast)
                                     </div>
                                 </div>
                             </div>

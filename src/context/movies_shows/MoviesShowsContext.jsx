@@ -4,9 +4,9 @@ import { createContext, useState } from "react";
 const MoviesShowsContext = createContext()
 
 const MOVIES_URL = import.meta.env.VITE_MOVIES_URL;
+const IPINFO_URL = import.meta.env.VITE_IPINFO_URL;
 const MOVIES_TOKEN = import.meta.env.VITE_MOVIES_TOKEN;
 const IPINFO_TOKEN = import.meta.env.VITE_IPINFO_TOKEN;
-const IPINFO_URL = import.meta.env.VITE_IPINFO_URL;
 
 export const MoviesShowsProvider = ({ children }) => {
 
@@ -20,6 +20,7 @@ export const MoviesShowsProvider = ({ children }) => {
     const [tvDetails, setTVDetails] = useState({})
     const [nowPlayingMovies, setNowPlayingMovies] = useState([])
     const [country, setCountry] = useState({})
+    const [youtubeTrailer, setYoutubeTrailer] = useState({})
 
     // Now Playing Movies
 
@@ -113,7 +114,7 @@ export const MoviesShowsProvider = ({ children }) => {
             language: 'en-US',
         });
 
-        const response = await fetch(`${MOVIES_URL}/tv/popular?${params}`);
+        const response = await fetch(`${MOVIES_URL}/trending/tv/week?${params}`);
 
         if (response.ok) {
             const { results } = await response.json();
@@ -167,7 +168,7 @@ export const MoviesShowsProvider = ({ children }) => {
         if (response.ok) {
 
             const data = await response.json();
-            console.log(data)
+            // console.log(data)
             setLoading(false)
             setMovieDetails(data);
 
@@ -190,7 +191,7 @@ export const MoviesShowsProvider = ({ children }) => {
         if (response.ok) {
 
             const data = await response.json();
-            console.log(data)
+            // console.log(data)
             setLoading(false)
             setMovieDetailsProviders(data);
 
@@ -214,6 +215,7 @@ export const MoviesShowsProvider = ({ children }) => {
 
             const data = await response.json();
             setLoading(false)
+            // console.log(data)
             setTVDetails(data);
 
         } else {
@@ -232,12 +234,33 @@ export const MoviesShowsProvider = ({ children }) => {
         if (response.ok) {
 
             const data = await response.json();
-            console.log(data)
+            // console.log(data)
             setCountry(data)
             setLoading(false)
         }
     }
 
+
+    //Youtube Trailers
+
+    const fetchTrailers = async (id) => {
+
+        const params = new URLSearchParams({
+            api_key: MOVIES_TOKEN,
+            language: 'en-US',
+        });
+
+        const response = await fetch(`${MOVIES_URL}/movie/${id}/videos?${params}`);
+
+        if (response.ok) {
+
+            const data = await response.json();
+
+            console.log(data)
+            setYoutubeTrailer(data)
+            setLoading(false)
+        }
+    }
 
     return <MoviesShowsContext.Provider value={{
         popularMovies,
@@ -250,6 +273,7 @@ export const MoviesShowsProvider = ({ children }) => {
         topRatedTVShows,
         movieDetailsProviders,
         country,
+        youtubeTrailer,
         setLoading,
         fetchPopularMovies,
         fetchPopularTVShows,
@@ -259,7 +283,8 @@ export const MoviesShowsProvider = ({ children }) => {
         fetchTopRatedMovies,
         fetchTopRatedTVShows,
         fetchMovieDetailsProviders,
-        fetchCountry
+        fetchCountry,
+        fetchTrailers
     }}>
         {children}
     </MoviesShowsContext.Provider>
