@@ -79,45 +79,11 @@ const MovieDetails = () => {
                                     </div>
 
                                     <div className="flex flex-col gap-5 md:flex-row justify-between">
-                                        <div className="flex flex-col gap-5">
-                                            <div>
-                                                <h1 className="font-bold text-white pb-2">Genres</h1>
-                                                {movieDetails.genres?.map((genre) => (
-                                                    <h1 key={genre.id}>{genre.name}</h1>
-                                                ))}
-                                            </div>
-                                            <div>
-                                                <div >
-                                                    <button className="btn btn-outline" onClick={() => document.getElementById('my_modal_2').showModal()}>Trailer</button>
-                                                    <dialog id="my_modal_2" className="modal">
-                                                        <div className="modal-box">
-                                                            <div className="iframe-container">
-                                                                {YTTrailerKey !== null ?
-                                                                    <iframe
-                                                                        width="100%"    /* Set the iframe width to 100% */
-                                                                        height="0"      /* Set the initial height to 0 */
-                                                                        src={videoUrl}
-                                                                        frameBorder="0"
-                                                                        allowFullScreen
-                                                                        allow="autoplay; encrypted-media"
-                                                                        onLoad={(e) => {
-                                                                            // Calculate and set the iframe's height based on its width and aspect ratio
-                                                                            const iframe = e.target;
-                                                                            const aspectRatio = 9 / 16; // 16:9 aspect ratio
-                                                                            const width = iframe.clientWidth;
-                                                                            iframe.style.height = `${width * aspectRatio}px`;
-                                                                        }}
-                                                                    ></iframe>
-                                                                    : <h1>No data available</h1>
-                                                                }
-                                                            </div>
-                                                        </div>
-                                                        <form method="dialog" className="modal-backdrop">
-                                                            <button onClick={() => document.getElementById('my_modal_2').close()}>Close</button>
-                                                        </form>
-                                                    </dialog>
-                                                </div>
-                                            </div>
+                                        <div>
+                                            <h1 className="font-bold text-white pb-2">Genres</h1>
+                                            {movieDetails.genres?.map((genre) => (
+                                                <h1 key={genre.id}>{genre.name}</h1>
+                                            ))}
                                         </div>
                                         <div>
                                             <h1 className="font-bold text-white pb-2">Where To Watch</h1>
@@ -171,6 +137,36 @@ const MovieDetails = () => {
                                                     </div>
                                                 </div>
                                             }
+                                        </div>
+                                        <div>
+                                            <button className="btn btn-outline" onClick={() => document.getElementById('my_modal_2').showModal()}>Trailer</button>
+                                            <dialog id="my_modal_2" className="modal">
+                                                <div className="modal-box">
+                                                    <div className="iframe-container">
+                                                        {YTTrailerKey !== null ?
+                                                            <iframe
+                                                                width="100%"    /* Set the iframe width to 100% */
+                                                                height="0"      /* Set the initial height to 0 */
+                                                                src={videoUrl}
+                                                                frameBorder="0"
+                                                                allowFullScreen
+                                                                allow="autoplay; encrypted-media"
+                                                                onLoad={(e) => {
+                                                                    // Calculate and set the iframe's height based on its width and aspect ratio
+                                                                    const iframe = e.target;
+                                                                    const aspectRatio = 9 / 16; // 16:9 aspect ratio
+                                                                    const width = iframe.clientWidth;
+                                                                    iframe.style.height = `${width * aspectRatio}px`;
+                                                                }}
+                                                            ></iframe>
+                                                            : <h1>No data available</h1>
+                                                        }
+                                                    </div>
+                                                </div>
+                                                <form method="dialog" className="modal-backdrop">
+                                                    <button onClick={() => document.getElementById('my_modal_2').close()}>Close</button>
+                                                </form>
+                                            </dialog>
                                         </div>
                                     </div>
                                 </div>
