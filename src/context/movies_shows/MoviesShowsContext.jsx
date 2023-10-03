@@ -17,6 +17,7 @@ export const MoviesShowsProvider = ({ children }) => {
     const [loading, setLoading] = useState(true)
     const [movieDetails, setMovieDetails] = useState({})
     const [movieDetailsProviders, setMovieDetailsProviders] = useState({})
+    const [movieDetailsCredits, setMovieDetailsCredits] = useState({})
     const [tvDetails, setTVDetails] = useState({})
     const [nowPlayingMovies, setNowPlayingMovies] = useState([])
     const [country, setCountry] = useState({})
@@ -201,6 +202,51 @@ export const MoviesShowsProvider = ({ children }) => {
         }
     }
 
+    //Movie Details - Credits
+
+
+    const fetchMovieDetailsCredits = async (id) => {
+        const params = new URLSearchParams({
+            api_key: MOVIES_TOKEN,
+            language: 'en-US',
+        });
+
+        const response = await fetch(`${MOVIES_URL}/movie/${id}/credits?${params}`);
+
+        if (response.ok) {
+
+            const data = await response.json();
+            console.log(data)
+            setLoading(false)
+            setMovieDetailsCredits(data);
+
+        } else {
+            window.location = '/notfound';
+
+        }
+    }
+
+    //Movie Details - Videos
+
+    const fetchTrailers = async (id) => {
+
+        const params = new URLSearchParams({
+            api_key: MOVIES_TOKEN,
+            language: 'en-US',
+        });
+
+        const response = await fetch(`${MOVIES_URL}/movie/${id}/videos?${params}`);
+
+        if (response.ok) {
+
+            const data = await response.json();
+
+            // console.log(data)
+            setYoutubeTrailer(data)
+            setLoading(false)
+        }
+    }
+
     //TV Details
 
     const fetchTVDetails = async (id) => {
@@ -241,26 +287,7 @@ export const MoviesShowsProvider = ({ children }) => {
     }
 
 
-    //Youtube Trailers
 
-    const fetchTrailers = async (id) => {
-
-        const params = new URLSearchParams({
-            api_key: MOVIES_TOKEN,
-            language: 'en-US',
-        });
-
-        const response = await fetch(`${MOVIES_URL}/movie/${id}/videos?${params}`);
-
-        if (response.ok) {
-
-            const data = await response.json();
-
-            console.log(data)
-            setYoutubeTrailer(data)
-            setLoading(false)
-        }
-    }
 
     return <MoviesShowsContext.Provider value={{
         popularMovies,
@@ -274,6 +301,7 @@ export const MoviesShowsProvider = ({ children }) => {
         movieDetailsProviders,
         country,
         youtubeTrailer,
+        movieDetailsCredits,
         setLoading,
         fetchPopularMovies,
         fetchPopularTVShows,
@@ -284,7 +312,8 @@ export const MoviesShowsProvider = ({ children }) => {
         fetchTopRatedTVShows,
         fetchMovieDetailsProviders,
         fetchCountry,
-        fetchTrailers
+        fetchTrailers,
+        fetchMovieDetailsCredits
     }}>
         {children}
     </MoviesShowsContext.Provider>

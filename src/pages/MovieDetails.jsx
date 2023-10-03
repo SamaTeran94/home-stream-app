@@ -4,11 +4,22 @@ import MoviesShowsContext from "../context/movies_shows/MoviesShowsContext";
 import Spinner from "../components/layout/Spinner";
 import { AiFillStar } from 'react-icons/ai'
 
+//Cast Carousel
+
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/scrollbar';
+
 const MovieDetails = () => {
 
-    const { movieDetails, fetchMovieDetails, loading, movieDetailsProviders, fetchMovieDetailsProviders, fetchCountry, country, fetchTrailers, youtubeTrailer } = useContext(MoviesShowsContext)
+    const { movieDetails, fetchMovieDetails, loading, movieDetailsProviders, fetchMovieDetailsProviders, fetchCountry, country, fetchTrailers, youtubeTrailer, fetchMovieDetailsCredits, movieDetailsCredits } = useContext(MoviesShowsContext)
 
     const params = useParams()
+
+    //Youtube Trailer
 
     let YTTrailerKey = ""; // Initialize the key as an empty string
 
@@ -27,6 +38,8 @@ const MovieDetails = () => {
     let videoUrl = `https://www.youtube.com/embed/${YTTrailerKey}`;
     console.log(videoUrl)
 
+    //Region For Providers
+
     let region = "";
     if (country.country) {
         region = country.country
@@ -36,11 +49,14 @@ const MovieDetails = () => {
     const regionDataRent = movieDetailsProviders.results?.[region]?.rent
     const regionDataFlatrate = movieDetailsProviders.results?.[region]?.flatrate
 
+    //Use Effect
+
     useEffect(() => {
         fetchMovieDetails(params.id)
         fetchMovieDetailsProviders(params.id)
         fetchCountry()
         fetchTrailers(params.id)
+        fetchMovieDetailsCredits(params.id)
     }, [])
 
     if (!loading) {
@@ -49,7 +65,7 @@ const MovieDetails = () => {
                 <div>
                     <img className="bg-image w-full h-auto lg:w-screen xl:h-screen" key={movieDetails.id} src={`https://image.tmdb.org/t/p/original${movieDetails.backdrop_path}`} alt="Album" />
                     <div className="flex justify-center mt-10">
-                        <div className="h-full w-10/12">
+                        <div className="h-full w-11/12">
                             <div className="gap-2 flex">
                                 <Link to='/'><button className="btn btn-outline">Home</button></Link>
                                 <Link to='/movies'><button className="btn btn-outline">Movies</button></Link>
@@ -62,7 +78,7 @@ const MovieDetails = () => {
                                         <img src="/src/images/no-image.jpg" alt="Album" />
                                     )}
                                 </div>
-                                <div className="w-3/4 md:w-3/5 lg:w-2/3 xl:w-3/4 mt-5 flex flex-col gap-5 md:ml-10 align-mid">
+                                <div className="w-full md:w-3/5 lg:w-2/3 xl:w-3/4 mt-5 flex flex-col gap-5 md:ml-10 align-mid">
                                     <div className="flex flex-col justify-center items-center text-center">
                                         <h1 className="font-bold text-3xl text-white">{movieDetails.title?.toUpperCase()} ({movieDetails.release_date?.split('-')[0]})</h1>
                                         <h1>{movieDetails.tagline}</h1>
@@ -168,63 +184,111 @@ const MovieDetails = () => {
                                                 </form>
                                             </dialog>
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
+                            <div className="mt-10 mb-2">
+                                <h1 className="font-bold text-3xl">Cast</h1>
+                            </div>
+                            <div className='w-7/12 sm:w-9/12 md:10/12 p-3 mb-10 bg-white'>
+                                <Swiper
+                                    modules={[Navigation, Pagination, Scrollbar, A11y]}
+                                    spaceBetween={20}
+                                    // slidesPerView={6}
+                                    navigation
+                                    // pagination={{ clickable: true }}
+                                    scrollbar={{ draggable: true }}
+                                    breakpoints={{
+                                        1536: {
+                                            slidesPerView: 7,
+                                        },
+                                        1280: {
+                                            slidesPerView: 6,
+
+                                        },
+
+                                        1024: {
+                                            slidesPerView: 4,
+
+                                        },
+                                        768: {
+                                            slidesPerView: 3,
+
+                                        },
+                                        640: {
+                                            slidesPerView: 2,
+                                        }
+                                    }}>
+                                    {movieDetailsCredits?.cast?.map(({ cast_id, profile_path, name, character }) => (
+                                        profile_path ? (
+                                            <SwiperSlide className="bg-white rounded-xl" key={cast_id}>
+                                                <img src={`https://image.tmdb.org/t/p/w500${profile_path}`} alt="Album" />
+                                                <div className="shadow-md p-3">
+                                                    <h1 className="font-bold text-black">{name}</h1>
+                                                    <h1>{character}</h1>
+                                                </div>
+                                            </SwiperSlide>
+                                        ) : <SwiperSlide className="bg-white rounded-xl" key={cast_id}>
+                                            <img src={`https://image.tmdb.org/t/p/w500${movieDetails.poster_path}`} alt="No Image available" />
+                                            <div className="shadow-md p-3">
+                                                <h1 className="font-bold text-black">{name}</h1>
+                                                <h1>{character}</h1>
+                                            </div>
+                                        </SwiperSlide>
+                                    ))}
+                                </Swiper>
+                            </div>
                         </div>
                     </div>
+
+
+
+
+
+
+
+
+
+
+                    {/*
                     <div className="flex justify-center mt-10 mb-10">
                         <div className="h-full w-10/12">
-                            <div tabIndex={0} className="collapse collapse-plus border border-base-300 bg-base-200">
-                                <input type="checkbox" />
-                                <div className="collapse-title text-xl font-medium">
-                                    Movie Info
+                            <div className="flex flex-col gap-3">
+                                <div>
+                                    <span className="font-bold text-white">
+                                        Budget:</span> {!movieDetails.budget ? (
+                                            <span>No data available</span>
+                                        ) : (
+                                            `$${movieDetails.budget?.toLocaleString()}`
+                                        )}
                                 </div>
-                                <div className="collapse-content">
-                                    <div className="flex flex-col gap-3">
-                                        <div>
-                                            <span className="font-bold text-white">
-                                                Budget:</span> {!movieDetails.budget ? (
-                                                    <span>No data available</span>
-                                                ) : (
-                                                    `$${movieDetails.budget?.toLocaleString()}`
-                                                )}
-                                        </div>
-                                        <hr></hr>
-                                        <h1><span className="font-bold text-white">Revenue: </span>{`$${movieDetails.revenue?.toLocaleString()}`}</h1>
-                                        <hr></hr>
-                                        <h1><span className="font-bold text-white">Runtime:</span> {`${movieDetails.runtime} min`}</h1>
-                                        <hr></hr>
-                                        <h1><span className="font-bold text-white">Status: </span>{movieDetails.status}</h1>
-                                        <hr></hr>
-                                        <div className="flex flex-col">
-                                            <h1 className="font-bold text-white">Production Companies</h1>
-                                            <div className="flex">
-                                                {movieDetails.production_companies?.map((company, index) => (
-                                                    <div key={company.id} className="flex flex-row">
-                                                        <h1>{company.name}{index < movieDetails.production_companies.length - 1 ? ',\u00A0' : ''}</h1>
-                                                    </div>
-                                                ))}
+                                <hr></hr>
+                                <h1><span className="font-bold text-white">Revenue: </span>{`$${movieDetails.revenue?.toLocaleString()}`}</h1>
+                                <hr></hr>
+                                <h1><span className="font-bold text-white">Runtime:</span> {`${movieDetails.runtime} min`}</h1>
+                                <hr></hr>
+                                <h1><span className="font-bold text-white">Status: </span>{movieDetails.status}</h1>
+                                <hr></hr>
+                                <div className="flex flex-col">
+                                    <h1 className="font-bold text-white">Production Companies</h1>
+                                    <div className="flex">
+                                        {movieDetails.production_companies?.map((company, index) => (
+                                            <div key={company.id} className="flex flex-row">
+                                                <h1>{company.name}{index < movieDetails.production_companies.length - 1 ? ',\u00A0' : ''}</h1>
                                             </div>
-                                        </div>
+                                        ))}
                                     </div>
                                 </div>
                             </div>
-                            <div tabIndex={0} className="collapse collapse-plus border border-base-300 bg-base-200">
-                                <input type="checkbox" />
-                                <div className="collapse-title text-xl font-medium">
-                                    Cast
-                                </div>
-                                <div className="collapse-content">
-                                    <div className="flex flex-col gap-3">
-                                        (//Cast)
-                                    </div>
-                                </div>
-                            </div>
-
                         </div>
                     </div>
-                </div>
+                                        */}
+
+
+
+
+                </div >
             </>
         )
     } else {
