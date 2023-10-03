@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import MoviesShowsContext from "../context/movies_shows/MoviesShowsContext";
 import Spinner from "../components/layout/Spinner";
 import { AiFillStar } from 'react-icons/ai'
+import { FaFacebook, FaInstagram, FaSquareTwitter, FaWikipediaW } from 'react-icons/fa6'
 
 //Cast Carousel
 
@@ -15,7 +16,7 @@ import 'swiper/css/scrollbar';
 
 const MovieDetails = () => {
 
-    const { movieDetails, fetchMovieDetails, loading, movieDetailsProviders, fetchMovieDetailsProviders, fetchCountry, country, fetchTrailers, youtubeTrailer, fetchMovieDetailsCredits, movieDetailsCredits } = useContext(MoviesShowsContext)
+    const { movieDetails, fetchMovieDetails, loading, movieDetailsProviders, fetchMovieDetailsProviders, fetchCountry, country, fetchTrailers, youtubeTrailer, fetchMovieDetailsCredits, movieDetailsCredits, movieDetailsSocials, fetchMovieDetailsSocials } = useContext(MoviesShowsContext)
 
     const params = useParams()
 
@@ -36,7 +37,6 @@ const MovieDetails = () => {
     }
 
     let videoUrl = `https://www.youtube.com/embed/${YTTrailerKey}`;
-    console.log(videoUrl)
 
     //Region For Providers
 
@@ -57,6 +57,7 @@ const MovieDetails = () => {
         fetchCountry()
         fetchTrailers(params.id)
         fetchMovieDetailsCredits(params.id)
+        fetchMovieDetailsSocials(params.id)
     }, [])
 
     if (!loading) {
@@ -188,106 +189,111 @@ const MovieDetails = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="mt-10 mb-2">
-                                <h1 className="font-bold text-3xl">Cast</h1>
-                            </div>
-                            <div className='w-7/12 sm:w-9/12 md:10/12 p-3 mb-10 bg-white'>
-                                <Swiper
-                                    modules={[Navigation, Pagination, Scrollbar, A11y]}
-                                    spaceBetween={20}
-                                    // slidesPerView={6}
-                                    navigation
-                                    // pagination={{ clickable: true }}
-                                    scrollbar={{ draggable: true }}
-                                    breakpoints={{
-                                        1536: {
-                                            slidesPerView: 7,
-                                        },
-                                        1280: {
-                                            slidesPerView: 6,
-
-                                        },
-
-                                        1024: {
-                                            slidesPerView: 4,
-
-                                        },
-                                        768: {
-                                            slidesPerView: 3,
-
-                                        },
-                                        640: {
-                                            slidesPerView: 2,
-                                        }
-                                    }}>
-                                    {movieDetailsCredits?.cast?.map(({ cast_id, profile_path, name, character }) => (
-                                        profile_path ? (
-                                            <SwiperSlide className="bg-white rounded-xl" key={cast_id}>
-                                                <img src={`https://image.tmdb.org/t/p/w500${profile_path}`} alt="Album" />
-                                                <div className="shadow-md p-3">
-                                                    <h1 className="font-bold text-black">{name}</h1>
-                                                    <h1>{character}</h1>
-                                                </div>
-                                            </SwiperSlide>
-                                        ) : <SwiperSlide className="bg-white rounded-xl" key={cast_id}>
-                                            <img src={`https://image.tmdb.org/t/p/w500${movieDetails.poster_path}`} alt="No Image available" />
-                                            <div className="shadow-md p-3">
-                                                <h1 className="font-bold text-black">{name}</h1>
-                                                <h1>{character}</h1>
-                                            </div>
-                                        </SwiperSlide>
-                                    ))}
-                                </Swiper>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-
-
-
-
-
-
-
-                    {/*
-                    <div className="flex justify-center mt-10 mb-10">
-                        <div className="h-full w-10/12">
-                            <div className="flex flex-col gap-3">
-                                <div>
-                                    <span className="font-bold text-white">
-                                        Budget:</span> {!movieDetails.budget ? (
-                                            <span>No data available</span>
-                                        ) : (
-                                            `$${movieDetails.budget?.toLocaleString()}`
-                                        )}
+                            <div className="">
+                                <div className="mt-5 xl:mt-20 mb-3">
+                                    <h1 className="font-bold text-3xl">Cast</h1>
                                 </div>
-                                <hr></hr>
-                                <h1><span className="font-bold text-white">Revenue: </span>{`$${movieDetails.revenue?.toLocaleString()}`}</h1>
-                                <hr></hr>
-                                <h1><span className="font-bold text-white">Runtime:</span> {`${movieDetails.runtime} min`}</h1>
-                                <hr></hr>
-                                <h1><span className="font-bold text-white">Status: </span>{movieDetails.status}</h1>
-                                <hr></hr>
-                                <div className="flex flex-col">
-                                    <h1 className="font-bold text-white">Production Companies</h1>
-                                    <div className="flex">
-                                        {movieDetails.production_companies?.map((company, index) => (
-                                            <div key={company.id} className="flex flex-row">
-                                                <h1>{company.name}{index < movieDetails.production_companies.length - 1 ? ',\u00A0' : ''}</h1>
+                                <div className="w-full flex">
+                                    <div className='w-7/12 sm:w-9/12 md:10/12 p-3 mb-10 bg-white'>
+                                        <Swiper
+                                            modules={[Navigation, Pagination, Scrollbar, A11y]}
+                                            spaceBetween={20}
+                                            // slidesPerView={6}
+                                            navigation
+                                            // pagination={{ clickable: true }}
+                                            scrollbar={{ draggable: true }}
+                                            breakpoints={{
+                                                1536: {
+                                                    slidesPerView: 6,
+                                                },
+                                                1280: {
+                                                    slidesPerView: 6,
+
+                                                },
+
+                                                1024: {
+                                                    slidesPerView: 4,
+
+                                                },
+                                                768: {
+                                                    slidesPerView: 3,
+
+                                                },
+                                                640: {
+                                                    slidesPerView: 2,
+                                                }
+                                            }}>
+                                            {movieDetailsCredits?.cast?.map(({ cast_id, profile_path, name, character }) => (
+                                                profile_path ? (
+                                                    <SwiperSlide className="bg-white" key={cast_id}>
+                                                        <img src={`https://image.tmdb.org/t/p/w500${profile_path}`} alt="Album" />
+                                                        <div className="shadow-md p-3">
+                                                            <h1 className="font-bold text-black">{name}</h1>
+                                                            <h1>{character}</h1>
+                                                        </div>
+                                                    </SwiperSlide>
+                                                ) : <SwiperSlide className="bg-white rounded-xl" key={cast_id}>
+                                                    <img src={`https://image.tmdb.org/t/p/w500${movieDetails.poster_path}`} alt="No Image available" />
+                                                    <div className="shadow-md p-3">
+                                                        <h1 className="font-bold text-black">{name}</h1>
+                                                        <h1>{character}</h1>
+                                                    </div>
+                                                </SwiperSlide>
+                                            ))}
+                                        </Swiper>
+                                    </div>
+                                    <div className="w-5/12 flex justify-center mt-10 mb-10">
+                                        <div className="h-full w-10/12">
+                                            <div className="flex flex-col gap-3">
+                                                <div className="flex gap-4">
+                                                    <a target='_blank' rel="noreferrer" href={`https://www.facebook.com/${movieDetailsSocials?.facebook_id}`}><FaFacebook style={{ width: '30px', height: '30px' }} /></a>
+                                                    <a target='_blank' rel="noreferrer" href={`https://www.instagram.com/${movieDetailsSocials?.instagram_id}`}>< FaInstagram style={{ width: '30px', height: '30px' }} /></a>
+                                                    <a target='_blank' rel="noreferrer" href={`https://www.twitter.com/${movieDetailsSocials?.twitter_id}`}><FaSquareTwitter style={{ width: '30px', height: '30px' }} /></a>
+                                                    <a target='_blank' rel="noreferrer" href={`https://www.wikidata.org/wiki/${movieDetailsSocials?.wikidata_id}`}><FaWikipediaW style={{ width: '30px', height: '30px' }} /></a>
+                                                </div>
+                                                <div>
+                                                    <span className="font-bold text-white">
+                                                        Budget:</span> {!movieDetails.budget ? (
+                                                            <span>No data available</span>
+                                                        ) : (
+                                                            `$${movieDetails.budget?.toLocaleString()}`
+                                                        )}
+                                                </div>
+                                                <hr></hr>
+                                                <div>
+                                                    <span className="font-bold text-white">
+                                                        Budget:</span> {!movieDetails.revenue ? (
+                                                            <span>No data available</span>
+                                                        ) : (
+                                                            `$${movieDetails.budget?.toLocaleString()}`
+                                                        )}
+                                                </div>
+                                                <hr></hr>
+                                                <h1><span className="font-bold text-white">Runtime:</span> {`${movieDetails.runtime} min`}</h1>
+                                                <hr></hr>
+                                                <h1><span className="font-bold text-white">Status: </span>{movieDetails.status}</h1>
+                                                <hr></hr>
+                                                <div>
+                                                    {movieDetails.homepage ? (<a href={movieDetails.homepage} target='_blank' rel="noreferrer" ><button className='btn btn-outline'>Homepage</button></a>) : null
+                                                    }
+                                                </div>
+                                                <div className="flex flex-col">
+                                                    {/*<h1 className="font-bold text-white">Production Companies</h1>
+                                                <div className="flex">
+                                                    {movieDetails.production_companies?.map((company, index) => (
+                                                        <div key={company.id} className="flex flex-row">
+                                                            <h1>{company.name}{index < movieDetails.production_companies.length - 1 ? ',\u00A0' : ''}</h1>
+                                                        </div>
+                                                    ))}
+                                                    </div>*/}
+                                                </div>
                                             </div>
-                                        ))}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                                        */}
-
-
-
-
                 </div >
             </>
         )

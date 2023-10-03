@@ -18,6 +18,7 @@ export const MoviesShowsProvider = ({ children }) => {
     const [movieDetails, setMovieDetails] = useState({})
     const [movieDetailsProviders, setMovieDetailsProviders] = useState({})
     const [movieDetailsCredits, setMovieDetailsCredits] = useState({})
+    const [movieDetailsSocials, setMovieDetailsSocials] = useState({})
     const [tvDetails, setTVDetails] = useState({})
     const [nowPlayingMovies, setNowPlayingMovies] = useState([])
     const [country, setCountry] = useState({})
@@ -216,7 +217,7 @@ export const MoviesShowsProvider = ({ children }) => {
         if (response.ok) {
 
             const data = await response.json();
-            console.log(data)
+            // console.log(data)
             setLoading(false)
             setMovieDetailsCredits(data);
 
@@ -243,6 +244,27 @@ export const MoviesShowsProvider = ({ children }) => {
 
             // console.log(data)
             setYoutubeTrailer(data)
+            setLoading(false)
+        }
+    }
+
+    //Movie Details - Social Media
+
+    const fetchMovieDetailsSocials = async (id) => {
+
+        const params = new URLSearchParams({
+            api_key: MOVIES_TOKEN,
+            language: 'en-US',
+        });
+
+        const response = await fetch(`${MOVIES_URL}/movie/${id}/external_ids?${params}`);
+
+        if (response.ok) {
+
+            const data = await response.json();
+
+            console.log(data)
+            setMovieDetailsSocials(data)
             setLoading(false)
         }
     }
@@ -286,9 +308,6 @@ export const MoviesShowsProvider = ({ children }) => {
         }
     }
 
-
-
-
     return <MoviesShowsContext.Provider value={{
         popularMovies,
         popularTVShows,
@@ -302,6 +321,7 @@ export const MoviesShowsProvider = ({ children }) => {
         country,
         youtubeTrailer,
         movieDetailsCredits,
+        movieDetailsSocials,
         setLoading,
         fetchPopularMovies,
         fetchPopularTVShows,
@@ -313,7 +333,8 @@ export const MoviesShowsProvider = ({ children }) => {
         fetchMovieDetailsProviders,
         fetchCountry,
         fetchTrailers,
-        fetchMovieDetailsCredits
+        fetchMovieDetailsCredits,
+        fetchMovieDetailsSocials
     }}>
         {children}
     </MoviesShowsContext.Provider>
