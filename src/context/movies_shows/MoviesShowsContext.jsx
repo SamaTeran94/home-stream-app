@@ -20,6 +20,9 @@ export const MoviesShowsProvider = ({ children }) => {
     const [movieDetailsCredits, setMovieDetailsCredits] = useState({})
     const [movieDetailsSocials, setMovieDetailsSocials] = useState({})
     const [tvDetails, setTVDetails] = useState({})
+    const [tvDetailsProviders, setTVDetailsProviders] = useState({})
+    const [tvDetailsCredits, setTVDetailsCredits] = useState({})
+    const [tvDetailsSocials, setTVDetailsSocials] = useState({})
     const [nowPlayingMovies, setNowPlayingMovies] = useState([])
     const [country, setCountry] = useState({})
     const [youtubeTrailer, setYoutubeTrailer] = useState({})
@@ -193,7 +196,7 @@ export const MoviesShowsProvider = ({ children }) => {
         if (response.ok) {
 
             const data = await response.json();
-            // console.log(data)
+            console.log(data)
             setLoading(false)
             setMovieDetailsProviders(data);
 
@@ -263,7 +266,7 @@ export const MoviesShowsProvider = ({ children }) => {
 
             const data = await response.json();
 
-            console.log(data)
+            // console.log(data)
             setMovieDetailsSocials(data)
             setLoading(false)
         }
@@ -289,6 +292,74 @@ export const MoviesShowsProvider = ({ children }) => {
         } else {
             window.location = '/notfound';
 
+        }
+    }
+
+    //TV Details - Providers
+
+    const fetchTVDetailsProviders = async (id) => {
+        const params = new URLSearchParams({
+            api_key: MOVIES_TOKEN,
+            language: 'en-US',
+        });
+
+        const response = await fetch(`${MOVIES_URL}/tv/${id}/watch/providers?${params}`);
+
+        if (response.ok) {
+
+            const data = await response.json();
+            console.log(data)
+            setLoading(false)
+            setTVDetailsProviders(data);
+
+        } else {
+            window.location = '/notfound';
+
+        }
+    }
+
+    //Movie Details - Credits
+
+
+    const fetchTVDetailsCredits = async (id) => {
+        const params = new URLSearchParams({
+            api_key: MOVIES_TOKEN,
+            language: 'en-US',
+        });
+
+        const response = await fetch(`${MOVIES_URL}/tv/${id}/credits?${params}`);
+
+        if (response.ok) {
+
+            const data = await response.json();
+            // console.log(data)
+            setLoading(false)
+            setTVDetailsCredits(data);
+
+        } else {
+            window.location = '/notfound';
+
+        }
+    }
+
+    //Movie Details - Social Media
+
+    const fetchTVDetailsSocials = async (id) => {
+
+        const params = new URLSearchParams({
+            api_key: MOVIES_TOKEN,
+            language: 'en-US',
+        });
+
+        const response = await fetch(`${MOVIES_URL}/tv/${id}/external_ids?${params}`);
+
+        if (response.ok) {
+
+            const data = await response.json();
+
+            // console.log(data)
+            setTVDetailsSocials(data)
+            setLoading(false)
         }
     }
 
@@ -322,6 +393,9 @@ export const MoviesShowsProvider = ({ children }) => {
         youtubeTrailer,
         movieDetailsCredits,
         movieDetailsSocials,
+        tvDetailsProviders,
+        tvDetailsCredits,
+        tvDetailsSocials,
         setLoading,
         fetchPopularMovies,
         fetchPopularTVShows,
@@ -334,7 +408,10 @@ export const MoviesShowsProvider = ({ children }) => {
         fetchCountry,
         fetchTrailers,
         fetchMovieDetailsCredits,
-        fetchMovieDetailsSocials
+        fetchMovieDetailsSocials,
+        fetchTVDetailsProviders,
+        fetchTVDetailsCredits,
+        fetchTVDetailsSocials
     }}>
         {children}
     </MoviesShowsContext.Provider>

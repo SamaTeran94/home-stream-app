@@ -186,9 +186,6 @@ const MovieDetails = () => {
                                                     </div>
                                                 }
                                             </div>
-
-
-
                                         </div>
                                     </div>
                                 </div>
