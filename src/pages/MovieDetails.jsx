@@ -69,7 +69,36 @@ const MovieDetails = () => {
                         <div className="h-full w-11/12">
                             <div className="gap-2 flex">
                                 <Link to='/'><button className="btn btn-outline">Home</button></Link>
-                                <Link to='/movies'><button className="btn btn-outline">Movies</button></Link>
+                                <div>
+                                    <button className="btn btn-outline" onClick={() => document.getElementById('my_modal_2').showModal()}>Trailer</button>
+                                    <dialog id="my_modal_2" className="modal">
+                                        <div className="modal-box">
+                                            <div className="iframe-container">
+                                                {YTTrailerKey !== null ?
+                                                    <iframe
+                                                        width="100%"    /* Set the iframe width to 100% */
+                                                        height="0"      /* Set the initial height to 0 */
+                                                        src={videoUrl}
+                                                        frameBorder="0"
+                                                        allowFullScreen
+                                                        allow="autoplay; encrypted-media"
+                                                        onLoad={(e) => {
+                                                            // Calculate and set the iframe's height based on its width and aspect ratio
+                                                            const iframe = e.target;
+                                                            const aspectRatio = 9 / 16; // 16:9 aspect ratio
+                                                            const width = iframe.clientWidth;
+                                                            iframe.style.height = `${width * aspectRatio}px`;
+                                                        }}
+                                                    ></iframe>
+                                                    : <h1>No data available</h1>
+                                                }
+                                            </div>
+                                        </div>
+                                        <form method="dialog" className="modal-backdrop">
+                                            <button onClick={() => document.getElementById('my_modal_2').close()}>Close</button>
+                                        </form>
+                                    </dialog>
+                                </div>
                             </div>
                             <div className="flex flex-col md:flex-row items-center">
                                 <div className="w-1/2 md:w-2/5 lg:w-1/3 xl:w-1/4 mt-5">
@@ -159,39 +188,8 @@ const MovieDetails = () => {
                                             </div>
 
 
-                                            <div>
-                                                <button className="btn btn-outline" onClick={() => document.getElementById('my_modal_2').showModal()}>Trailer</button>
-                                                <dialog id="my_modal_2" className="modal">
-                                                    <div className="modal-box">
-                                                        <div className="iframe-container">
-                                                            {YTTrailerKey !== null ?
-                                                                <iframe
-                                                                    width="100%"    /* Set the iframe width to 100% */
-                                                                    height="0"      /* Set the initial height to 0 */
-                                                                    src={videoUrl}
-                                                                    frameBorder="0"
-                                                                    allowFullScreen
-                                                                    allow="autoplay; encrypted-media"
-                                                                    onLoad={(e) => {
-                                                                        // Calculate and set the iframe's height based on its width and aspect ratio
-                                                                        const iframe = e.target;
-                                                                        const aspectRatio = 9 / 16; // 16:9 aspect ratio
-                                                                        const width = iframe.clientWidth;
-                                                                        iframe.style.height = `${width * aspectRatio}px`;
-                                                                    }}
-                                                                ></iframe>
-                                                                : <h1>No data available</h1>
-                                                            }
-                                                        </div>
-                                                    </div>
-                                                    <form method="dialog" className="modal-backdrop">
-                                                        <button onClick={() => document.getElementById('my_modal_2').close()}>Close</button>
-                                                    </form>
-                                                </dialog>
-                                            </div>
+
                                         </div>
-
-
                                     </div>
                                 </div>
                             </div>
@@ -280,7 +278,7 @@ const MovieDetails = () => {
                                                 <h1><span className="font-bold text-white">Status: </span>{movieDetails.status}</h1>
                                                 <hr></hr>
                                                 <div>
-                                                    {movieDetails.homepage ? (<a href={movieDetails.homepage} target='_blank' rel="noreferrer" ><button className='btn btn-outline'>Homepage</button></a>) : null
+                                                    {movieDetails.homepage ? (<a href={movieDetails.homepage} target='_blank' rel="noreferrer" ><button className='btn btn-outline'>Official Webpage</button></a>) : null
                                                     }
                                                 </div>
                                                 <div className="flex flex-col">
