@@ -95,68 +95,101 @@ const MovieDetails = () => {
                                         <h1 className="text-justify"> {movieDetails.overview}</h1>
                                     </div>
 
-                                    <div className="flex flex-row gap-5 md:flex-row justify-between">
+                                    <div className="flex flex-row md:flex-row justify-between">
                                         <div>
                                             <h1 className="font-bold text-white pb-2">Genres</h1>
                                             {movieDetails.genres?.map((genre) => (
                                                 <h1 key={genre.id}>{genre.name}</h1>
                                             ))}
                                         </div>
-                                        <div>
-                                            <h1 className="font-bold text-white pb-2">Where To Watch</h1>
-                                            {!regionDataBuy && !regionDataRent && !regionDataFlatrate ?
-                                                <h1>No Data Available</h1> :
-                                                <div className={!regionDataBuy && !regionDataRent ? `flex flex-col gap-0` : `flex flex-col gap-5`}>
-                                                    <div className="flex gap-2">
-                                                        {!regionDataBuy ? null : (
-                                                            <div className="flex gap-4">
-                                                                <h1 className="">Buy</h1>
-                                                                {regionDataBuy.map((provider) => (
-                                                                    <img
-                                                                        src={`https://image.tmdb.org/t/p/w200${provider.logo_path}`}
-                                                                        key={provider.id}
-                                                                        alt={`${provider.provider_id} logo`}
-                                                                        style={{ width: '40px', height: 'auto', borderRadius: '5px' }}
-                                                                    />
-                                                                ))}
-                                                            </div>
-                                                        )}
+                                        <div className="flex flex-col lg:flex-row gap-5 lg:gap-0">
+                                            <div>
+                                                <h1 className="font-bold text-white pb-2">Where To Watch</h1>
+                                                {!regionDataBuy && !regionDataRent && !regionDataFlatrate ?
+                                                    <h1>No Data Available</h1> :
+                                                    <div className={!regionDataBuy && !regionDataRent ? `flex flex-col gap-0` : `flex flex-col gap-5`}>
+                                                        <div className="flex gap-2">
+                                                            {!regionDataBuy ? null : (
+                                                                <div className="flex gap-3">
+                                                                    <h1 className="">Buy</h1>
+                                                                    {regionDataBuy.map((provider) => (
+                                                                        <img
+                                                                            src={`https://image.tmdb.org/t/p/w200${provider.logo_path}`}
+                                                                            key={provider.id}
+                                                                            alt={`${provider.provider_id} logo`}
+                                                                            style={{ width: '40px', height: 'auto', borderRadius: '5px' }}
+                                                                        />
+                                                                    ))}
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                        <div className="flex gap-2">
+                                                            {!regionDataRent ? null : (
+                                                                <div className="flex gap-3">
+                                                                    <h1 className="">Rent</h1>
+                                                                    {regionDataRent.map((provider) => (
+                                                                        <img
+                                                                            src={`https://image.tmdb.org/t/p/w200${provider.logo_path}`}
+                                                                            key={provider.id}
+                                                                            alt={`${provider.provider_id} logo`}
+                                                                            style={{ width: '40px', height: 'auto', borderRadius: '5px' }}
+                                                                        />
+                                                                    ))}
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                        <div className="flex gap-2">
+                                                            {!regionDataFlatrate ? null : (
+                                                                <div className="flex flex-wrap gap-3 bg-red-200">
+                                                                    <h1 className="">Stream</h1>
+                                                                    {regionDataFlatrate.map((provider) => (
+                                                                        <div key={provider.id}>
+                                                                            <img
+                                                                                src={`https://image.tmdb.org/t/p/w200${provider.logo_path}`}
+                                                                                alt={`${provider.provider_id} logo`}
+                                                                                style={{ width: '40px', height: 'auto', borderRadius: '5px' }}
+                                                                            />
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
+                                                            )}
+                                                        </div>
                                                     </div>
-                                                    <div className="flex gap-2">
-                                                        {!regionDataRent ? null : (
-                                                            <div className="flex gap-4">
-                                                                <h1 className="">Rent</h1>
-                                                                {regionDataRent.map((provider) => (
-                                                                    <img
-                                                                        src={`https://image.tmdb.org/t/p/w200${provider.logo_path}`}
-                                                                        key={provider.id}
-                                                                        alt={`${provider.provider_id} logo`}
-                                                                        style={{ width: '40px', height: 'auto', borderRadius: '5px' }}
-                                                                    />
-                                                                ))}
-                                                            </div>
-                                                        )}
+                                                }
+                                            </div>
+
+
+                                            <div>
+                                                <button className="btn btn-outline" onClick={() => document.getElementById('my_modal_2').showModal()}>Trailer</button>
+                                                <dialog id="my_modal_2" className="modal">
+                                                    <div className="modal-box">
+                                                        <div className="iframe-container">
+                                                            {YTTrailerKey !== null ?
+                                                                <iframe
+                                                                    width="100%"    /* Set the iframe width to 100% */
+                                                                    height="0"      /* Set the initial height to 0 */
+                                                                    src={videoUrl}
+                                                                    frameBorder="0"
+                                                                    allowFullScreen
+                                                                    allow="autoplay; encrypted-media"
+                                                                    onLoad={(e) => {
+                                                                        // Calculate and set the iframe's height based on its width and aspect ratio
+                                                                        const iframe = e.target;
+                                                                        const aspectRatio = 9 / 16; // 16:9 aspect ratio
+                                                                        const width = iframe.clientWidth;
+                                                                        iframe.style.height = `${width * aspectRatio}px`;
+                                                                    }}
+                                                                ></iframe>
+                                                                : <h1>No data available</h1>
+                                                            }
+                                                        </div>
                                                     </div>
-                                                    <div className="flex gap-2">
-                                                        {!regionDataFlatrate ? null : (
-                                                            <div className="flex gap-4">
-                                                                <h1 className="">Stream</h1>
-                                                                {regionDataFlatrate.map((provider) => (
-                                                                    <img
-                                                                        src={`https://image.tmdb.org/t/p/w200${provider.logo_path}`}
-                                                                        key={provider.id}
-                                                                        alt={`${provider.provider_id} logo`}
-                                                                        style={{ width: '40px', height: 'auto', borderRadius: '5px' }}
-                                                                    />
-                                                                ))}
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                </div>
-                                            }
+                                                    <form method="dialog" className="modal-backdrop">
+                                                        <button onClick={() => document.getElementById('my_modal_2').close()}>Close</button>
+                                                    </form>
+                                                </dialog>
+                                            </div>
                                         </div>
-
-
 
 
                                     </div>
