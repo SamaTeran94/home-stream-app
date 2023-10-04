@@ -36,7 +36,7 @@ export const MoviesShowsProvider = ({ children }) => {
             language: 'en-US',
         });
 
-        const response = await fetch(`${MOVIES_URL}/movie/now_playing?${params}`);
+        const response = await fetch(`${MOVIES_URL}/movie/top_rated?${params}`);
 
         if (response.ok) {
             const { results } = await response.json();

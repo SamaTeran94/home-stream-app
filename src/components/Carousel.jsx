@@ -21,7 +21,7 @@ const Carousel = () => {
 
         <div className="h-auto w-auto px-20 py-20 mb-20" style={{ backgroundImage: 'url("https://home-stream-app.vercel.app/showcase-bg.jpg")', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center' }}>
             <div className="flex justify-center mb-10">
-                <h1 className="font-bold text-white text-3xl">Now Playing Movies</h1>
+                <h1 className="font-bold text-white text-3xl">Top Rated Movies</h1>
             </div>
             <Swiper
                 modules={[Navigation, Pagination, Scrollbar, A11y]}
