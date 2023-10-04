@@ -138,19 +138,19 @@ const MovieDetails = () => {
                                                                 </div>
                                                             )}
                                                         </div>
-                                                        <div className="flex gap-2">
+                                                        <div className="">
                                                             {!regionDataFlatrate ? null : (
-                                                                <div className="flex flex-wrap gap-3 bg-red-200">
+                                                                <div className="flex gap-3">
                                                                     <h1 className="">Stream</h1>
-                                                                    {regionDataFlatrate.map((provider) => (
-                                                                        <div key={provider.id}>
-                                                                            <img
+                                                                    <div className="w-32 sm:w-full flex flex-wrap gap-3">
+                                                                        {regionDataFlatrate.map((provider) => (
+                                                                            <img key={provider.id}
                                                                                 src={`https://image.tmdb.org/t/p/w200${provider.logo_path}`}
                                                                                 alt={`${provider.provider_id} logo`}
                                                                                 style={{ width: '40px', height: 'auto', borderRadius: '5px' }}
                                                                             />
-                                                                        </div>
-                                                                    ))}
+                                                                        ))}
+                                                                    </div>
                                                                 </div>
                                                             )}
                                                         </div>
