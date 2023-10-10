@@ -302,7 +302,7 @@ const TVDetails = () => {
                                 <h1 className="font-bold text-3xl">Seasons</h1>
                             </div>
                             <div className="flex flex-col w-full items-center">
-                                <div className="bg-white rounded-lg w-3/5 sm:w-full sm:flex mb-5">
+                                <div className="bg-white rounded-lg w-3/4 sm:w-full sm:flex mb-5">
                                     <div className="">
                                         <img className="w-full h-full sm:w-84 md:w-60 lg:w-40 xl:w-32"
                                             key={tvDetailsSeasons.id} src={`https://image.tmdb.org/t/p/w500${tvDetailsSeasons.poster_path}`} alt="Album" ></img>
