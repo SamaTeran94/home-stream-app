@@ -23,9 +23,11 @@ export const MoviesShowsProvider = ({ children }) => {
     const [tvDetailsProviders, setTVDetailsProviders] = useState({})
     const [tvDetailsCredits, setTVDetailsCredits] = useState({})
     const [tvDetailsSocials, setTVDetailsSocials] = useState({})
+    const [tvDetailsSeasons, setTVDetailsSeasons] = useState({})
     const [nowPlayingMovies, setNowPlayingMovies] = useState([])
     const [country, setCountry] = useState({})
     const [youtubeTrailer, setYoutubeTrailer] = useState({})
+    let [seasonNumber, setSeasonNumber] = useState(1)
 
     // Now Playing Movies
 
@@ -196,7 +198,7 @@ export const MoviesShowsProvider = ({ children }) => {
         if (response.ok) {
 
             const data = await response.json();
-            console.log(data)
+            // console.log(data)
             setLoading(false)
             setMovieDetailsProviders(data);
 
@@ -308,7 +310,7 @@ export const MoviesShowsProvider = ({ children }) => {
         if (response.ok) {
 
             const data = await response.json();
-            console.log(data)
+            // console.log(data)
             setLoading(false)
             setTVDetailsProviders(data);
 
@@ -363,6 +365,29 @@ export const MoviesShowsProvider = ({ children }) => {
         }
     }
 
+    //Movie Details - Seasons
+
+    const fetchTVDetailsSeasons = async (id) => {
+
+        setSeasonNumber(1)
+
+        const params = new URLSearchParams({
+            api_key: MOVIES_TOKEN,
+            language: 'en-US',
+        });
+
+        const response = await fetch(`${MOVIES_URL}/tv/${id}/season/1?${params}`);
+
+        if (response.ok) {
+
+            const data = await response.json();
+
+            // console.log(data)
+            setTVDetailsSeasons(data)
+            setLoading(false)
+        }
+    }
+
     //IP INFO Request
 
     const fetchCountry = async () => {
@@ -396,6 +421,10 @@ export const MoviesShowsProvider = ({ children }) => {
         tvDetailsProviders,
         tvDetailsCredits,
         tvDetailsSocials,
+        tvDetailsSeasons,
+        seasonNumber,
+        setSeasonNumber,
+        setTVDetailsSeasons,
         setLoading,
         fetchPopularMovies,
         fetchPopularTVShows,
@@ -411,7 +440,8 @@ export const MoviesShowsProvider = ({ children }) => {
         fetchMovieDetailsSocials,
         fetchTVDetailsProviders,
         fetchTVDetailsCredits,
-        fetchTVDetailsSocials
+        fetchTVDetailsSocials,
+        fetchTVDetailsSeasons
     }}>
         {children}
     </MoviesShowsContext.Provider>

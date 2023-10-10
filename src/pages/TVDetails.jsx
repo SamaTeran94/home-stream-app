@@ -16,7 +16,7 @@ import 'swiper/css/scrollbar';
 
 const TVDetails = () => {
 
-    const { tvDetails, fetchTVDetails, loading, tvDetailsProviders, fetchTVDetailsProviders, fetchCountry, country, fetchTVDetailsCredits, tvDetailsCredits, fetchTVDetailsSocials, tvDetailsSocials } = useContext(MoviesShowsContext)
+    const { tvDetails, fetchTVDetails, loading, tvDetailsProviders, fetchTVDetailsProviders, fetchCountry, country, fetchTVDetailsCredits, tvDetailsCredits, fetchTVDetailsSocials, tvDetailsSocials, fetchTVDetailsSeasons, tvDetailsSeasons, setTVDetailsSeasons, seasonNumber, setSeasonNumber } = useContext(MoviesShowsContext)
 
     const params = useParams()
 
@@ -25,8 +25,14 @@ const TVDetails = () => {
         fetchTVDetailsProviders(params.id)
         fetchTVDetailsCredits(params.id)
         fetchTVDetailsSocials(params.id)
+        fetchTVDetailsSeasons(params.id)
         fetchCountry()
     }, [])
+
+
+    const MOVIES_URL = import.meta.env.VITE_MOVIES_URL;
+    const MOVIES_TOKEN = import.meta.env.VITE_MOVIES_TOKEN;
+    let nextSeason = ""
 
     //Region For Providers
 
@@ -39,6 +45,53 @@ const TVDetails = () => {
     const regionDataRent = tvDetailsProviders.results?.[region]?.rent
     const regionDataFlatrate = tvDetailsProviders.results?.[region]?.flatrate
 
+    //Next Button
+
+    const handleNextSeason = async () => {
+
+        nextSeason = seasonNumber + 1; // Store the updated page value
+
+        setSeasonNumber(nextSeason); // Update the page state
+
+        const params = new URLSearchParams({
+            api_key: MOVIES_TOKEN,
+            language: 'en-US',
+        });
+
+        const response = await fetch(`${MOVIES_URL}/tv/${tvDetails.id}/season/${nextSeason}?${params}`);
+
+        if (response.ok) {
+
+            const data = await response.json();
+
+            console.log(data)
+            setTVDetailsSeasons(data)
+        }
+    }
+
+    //Previous Button
+
+    const handlePreviousSeason = async () => {
+
+        nextSeason = seasonNumber - 1; // Store the updated page value
+
+        setSeasonNumber(nextSeason); // Update the page state
+
+        const params = new URLSearchParams({
+            api_key: MOVIES_TOKEN,
+            language: 'en-US',
+        });
+
+        const response = await fetch(`${MOVIES_URL}/tv/${tvDetails.id}/season/${nextSeason}?${params}`);
+
+        if (response.ok) {
+
+            const data = await response.json();
+
+            console.log(data)
+            setTVDetailsSeasons(data)
+        }
+    }
 
     if (!loading) {
         return (
@@ -246,9 +299,41 @@ const TVDetails = () => {
                                 </div>
                             </div>
 
+                            <div>
+                                <div className="mb-2">
+                                    <h1 className="font-bold text-3xl">Seasons</h1>
+                                </div>
+                                <div className="bg-white rounded-lg w-full flex mb-5">
+                                    <div className="">
+                                        <img className="w-season_img sm:w-84 md:w-60 lg:w-40 xl:w-32 h-auto"
+                                            key={tvDetailsSeasons.id} src={`https://image.tmdb.org/t/p/w500${tvDetailsSeasons.poster_path}`} alt="Album" ></img>
+                                    </div>
+                                    <div className="p-5">
+                                        <h1 className="text-black font-bold text-lg">{tvDetailsSeasons?.name}</h1>
+                                        <div className="flex items-center gap-3">
+                                            <div className="flex items-center">
+                                                <AiFillStar className="text-yellow-300 mr-1" />
+                                                <h1>{tvDetailsSeasons?.vote_average?.toFixed(1)}/10</h1>
+                                            </div>
+                                            <h1>{tvDetailsSeasons?.air_date?.split('-')[0]}</h1>
+                                            {tvDetailsSeasons?.episodes && (
+                                                <div>{tvDetailsSeasons.episodes[tvDetailsSeasons.episodes.length - 1].episode_number} Episodes</div>
+                                            )}
+                                        </div>
+                                        <div className="mt-3">
+                                            <h1 className="text-black font-bold text-lg">Overview</h1>
+                                            {tvDetailsSeasons.overview}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="mb-5">
+                                    <button disabled={seasonNumber === 1} className={seasonNumber === 1 ? `btn btn-sm btn-outline cursor-not-allowed no-animation` : `btn btn-sm btn-outline`} onClick={handlePreviousSeason}>Previous Season</button>
+                                    <button disabled={seasonNumber === tvDetails.number_of_seasons} className={seasonNumber === tvDetails.number_of_seasons ? `btn btn-sm btn-outline cursor-not-allowed no-animation` : `btn btn-sm btn-outline`} onClick={handleNextSeason}>Next Season</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </div >
             </>
         )
     } else {
