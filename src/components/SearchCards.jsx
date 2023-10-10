@@ -108,23 +108,14 @@ const SearchCards = ({ searchResults, setSearchResults, page, setPage, setLoadin
                     <div className="flex justify-center mb-5">
                         <h1 className="font-bold text-white text-2xl">{`${searchResults.results.length} of ${searchResults.total_results} results for ${searchTerm}`}</h1>
                     </div>
-                    <div className="flex flex-row justify-end mb-5">
-                        <input
-                            type="radio"
-                            name="type"
-                            value="movie"
-                            className="radio"
 
-                        />
-                        Year
-                    </div>
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-7 px-4 gap-5">
 
                         <SearchCardsItem searchResults={searchResults} />
                     </div>
                     <div className="join mt-5 flex justify-start pl-4">
-                        <button onClick={handlePrevButton} className={searchResults.page === 1 ? `join-item btn btn-outline cursor-not-allowed no-animation` : `join-item btn btn-outline`}>Previous page</button>
-                        <button onClick={handleNextButton} className={searchResults.page === searchResults.total_pages ? `join-item btn btn-outline cursor-not-allowed no-animation` : `join-item btn btn-outline`}>Next page</button>
+                        <button onClick={handlePrevButton} disabled={searchResults.page === 1} className={searchResults.page === 1 ? `join-item btn btn-outline cursor-not-allowed no-animation` : `join-item btn btn-outline`}>Previous page</button>
+                        <button onClick={handleNextButton} disabled={searchResults.page === searchResults.total_pages} className={searchResults.page === searchResults.total_pages ? `join-item btn btn-outline cursor-not-allowed no-animation` : `join-item btn btn-outline`}>Next page</button>
                     </div>
                     <div className="mt-1 flex justify-start pl-4">
                         <h1 className="font-bold text-white text-lg">{`Page ${searchResults.page} of ${searchResults.total_pages}`}</h1>

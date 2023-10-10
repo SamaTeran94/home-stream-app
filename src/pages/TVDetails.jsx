@@ -310,10 +310,12 @@ const TVDetails = () => {
                                     <div className="p-5">
                                         <h1 className="text-black font-bold text-lg">{tvDetailsSeasons?.name}</h1>
                                         <div className="flex items-center gap-3">
-                                            <div className="flex items-center">
-                                                <AiFillStar className="text-yellow-300 mr-1" />
-                                                <h1>{tvDetailsSeasons?.vote_average?.toFixed(1)}/10</h1>
-                                            </div>
+                                            {tvDetailsSeasons.vote_average ? (
+                                                <div className="flex items-center">
+                                                    <AiFillStar className="text-yellow-300 mr-1" />
+                                                    <h1>{tvDetailsSeasons?.vote_average?.toFixed(1)}/10</h1>
+                                                </div>
+                                            ) : 'No data available'}
                                             <h1>{tvDetailsSeasons?.air_date?.split('-')[0]}</h1>
                                             {tvDetailsSeasons?.episodes && (
                                                 <div>{tvDetailsSeasons.episodes[tvDetailsSeasons.episodes.length - 1].episode_number} Episodes</div>
@@ -321,7 +323,7 @@ const TVDetails = () => {
                                         </div>
                                         <div className="mt-3">
                                             <h1 className="text-black font-bold text-lg">Overview</h1>
-                                            {tvDetailsSeasons.overview}
+                                            {tvDetailsSeasons.overview ? tvDetailsSeasons.overview : 'No data available'}
                                         </div>
                                     </div>
                                 </div>
