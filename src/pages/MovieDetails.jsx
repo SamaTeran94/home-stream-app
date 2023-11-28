@@ -264,10 +264,10 @@ const MovieDetails = () => {
                                                 <hr></hr>
                                                 <div>
                                                     <span className="font-bold text-white">
-                                                        Budget:</span> {!movieDetails.revenue ? (
+                                                        Revenue:</span> {!movieDetails.revenue ? (
                                                             <span>No data available</span>
                                                         ) : (
-                                                            `$${movieDetails.budget?.toLocaleString()}`
+                                                            `$${movieDetails.revenue?.toLocaleString()}`
                                                         )}
                                                 </div>
                                                 <hr></hr>
