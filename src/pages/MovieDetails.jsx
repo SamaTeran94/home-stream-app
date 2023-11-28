@@ -99,6 +99,7 @@ const MovieDetails = () => {
                                         </form>
                                     </dialog>
                                 </div>
+                                <a href={`https://movie-web.app/media/tmdb-movie-${params.id}`} target="_blank" rel="noreferrer" className="btn btn-outline">Stream Online</a>
                             </div>
                             <div className="flex flex-col md:flex-row items-center">
                                 <div className="w-1/2 md:w-2/5 lg:w-1/3 xl:w-1/4 mt-5">

@@ -102,7 +102,7 @@ const TVDetails = () => {
                         <div className="h-full w-11/12">
                             <div className="flex justify-center md:justify-start gap-2">
                                 <Link to='/'><button className="btn btn-outline">Home</button></Link>
-                                <Link to='/tvshows'><button className="btn btn-outline">TV Shows</button></Link>
+                                <a href={`https://movie-web.app/media/tmdb-show-${params.id}`} target="_blank" rel="noreferrer"><button className="btn btn-outline">TV Shows</button></a>
                             </div>
                             <div className="flex flex-col md:flex-row items-center">
                                 <div className="w-1/2 md:w-2/5 lg:w-1/3 xl:w-1/4 mt-5">
